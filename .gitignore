@@ -1,5 +1,7 @@
 env/
 
+__pycache__/
+
 Dataset/
 
 captured_frames/
