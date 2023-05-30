@@ -1,5 +1,8 @@
 import os
 import random
+import time
+from data import *
+from cvzone.HandTrackingModule import HandDetector
 
 
 def folder_crop(folder_name):
@@ -64,3 +67,24 @@ def crop_lines_from_mediapipe_excel_dataset(folder_path):
                 # Truncate the file to the new length
                 csv_file.truncate()
 
+
+def cvzone_hand_tracking_module_speedtest():
+    # Load data for speedtest
+    images, _ = load_data('./Dataset/Indian/', grayscale=False, shape=(128, 128), labels='A')
+
+    # Load the hand detector module from cvzone
+    detector = HandDetector(detectionCon=0.8, maxHands=2)
+
+    # Always fresh load data before running this test
+    start = time.time()
+
+    m = images.shape[0] // 10
+
+    for i in range(m):
+        _ = detector.findHands(images[i], draw=False)
+
+    end = time.time()
+
+    print(f'Frames to process : {m}')
+    print(f'Time taken : {end - start} sec.')
+    print(f'Hand detection speed : {m / (end - start)} frames/s.')
