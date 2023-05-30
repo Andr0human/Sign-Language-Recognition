@@ -16,10 +16,12 @@
 
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 # Preprocess the individual frame before using it for classification
 def apply_preprocessing(frame):
+    # Assumes the frame to be preprocessed is in bgr-format
 
     # Define the lower and upper bounds of the skin color in HSV color space
     skin_lower = np.array([0, 20, 70], dtype=np.uint8)
@@ -41,11 +43,10 @@ def apply_preprocessing(frame):
 
 
 # Preprocessing on the list of images
-def get_preprocessed_set(images):
+def get_preprocessed_set(images, image_preprocessor):
 
     m = images.shape[0]
-    preprocessed_images = tuple(apply_contour_preprocessing(images[i]) for i in range(m))
-
+    preprocessed_images = tuple(image_preprocessor(images[i]) for i in range(m))
     return np.array(preprocessed_images)
 
 
@@ -86,6 +87,26 @@ def apply_contour_preprocessing(frame):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     frame = cv2.resize(frame, (64, 64))
-
     return frame
+
+
+
+# Show frame before and after preprocessing 
+def show_preprocess_result(frame, p_frame):
+
+    fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+    fig.tight_layout(pad=0.13, rect=[0, 0.03, 1, 0.91]) #[left, bottom, right, top]
+
+    # widgvis(fig)
+
+    # Display the first image in the left subplot
+    axes[0].imshow(frame)
+    axes[0].set_title('Frame')
+
+    # Display the second image in the right subplot
+    axes[1].imshow(p_frame)
+    axes[1].set_title('Processed Frame')
+
+    # Show the plot
+    plt.show()
 

@@ -8,10 +8,14 @@ import cv2
 import matplotlib.pyplot as plt
 
 
-def load_data(path, grayscale=True, unroll=False, rgb=False, shape=(64, 64)):
+def load_data(path, labels=None, grayscale=True, unroll=False, rgb=False, shape=(64, 64)):
 
     # Get a list of all the folders in the directory
     folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+
+    if labels is not None:
+        folders = [f for f in folders if f in labels]
+
     folders.sort()
 
     # Print the list of folders
@@ -85,11 +89,11 @@ def convert_bytes(size):
 
 # Show a handful of images from the list of training data
 # show_random_dataset(images, labels)
-def show_random_dataset(image_list, label_list):
+def show_random_dataset(image_list, label_list, rowcol=(5, 5)):
 
     m = image_list.shape[0]
 
-    fig, axes = plt.subplots(5, 5, figsize=(10, 10))
+    fig, axes = plt.subplots(rowcol[0], rowcol[1], figsize=(10, 10))
     fig.tight_layout(pad=0.13, rect=[0, 0.03, 1, 0.91]) #[left, bottom, right, top]
 
     # widgvis(fig)
@@ -146,4 +150,3 @@ def create_dataset_by_rotation(image, label):
 
 def create_dataset_by_resize_and_shift(image, label):
     pass
-
