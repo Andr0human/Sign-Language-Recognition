@@ -24,7 +24,7 @@ def load_data(path, labels=None, grayscale=True, unroll=False, rgb=False, shape=
     data, labels = (), ()
 
     for folder in folders:
-        # Get a list of all the image files in the directory (supported file extensions: .jpg, .jpeg, .png, .bmp, .gif, .tiff)
+        # Get a list of all the image files in the directory (supported file extensions: .jpg, .jpeg, .png)
         images_path = glob.glob(os.path.join(path + "/" + folder, '*.jpg'))
 
 
@@ -58,35 +58,6 @@ def load_data(path, labels=None, grayscale=True, unroll=False, rgb=False, shape=
     return np.array(data), np.array(labels)
 
 
-
-# Unrolling the 2d matrix (64, 64) to (64 * 64, ) 1d matrix
-def unroll_matrix(mat):
-    n = mat.shape[0]
-    unrolled_mat = tuple(mat[i].ravel() for i in range(n))
-    return np.array(unrolled_mat)
-
-# Encoder for encoding labels from ['0' -> 0, 'A' -> 10, 'K' -> 20, 'Z' -> 35]
-def encoder(label):
-    if label <= '9':
-        return ord(label) - 48
-    return ord(label) - 55
-
-
-def encode_labels(labels):
-    t = tuple(encoder(label) for label in labels)
-    return np.array(t)
-
-# Convert bytes to [KB, MB, GB]
-def convert_bytes(size):
-
-    for x in ['bytes', 'KB', 'MB', 'GB']:
-        if size < 1024:
-            return "%3.1f %s" % (size, x)
-        size /= 1024
-
-    return size
-
-
 # Show a handful of images from the list of training data
 # show_random_dataset(images, labels)
 def show_random_dataset(image_list, label_list, rowcol=(5, 5)):
@@ -114,7 +85,6 @@ def show_random_dataset(image_list, label_list, rowcol=(5, 5)):
 
     fig.suptitle("Label, image", fontsize=14)
     plt.show()
-
 
 
 # Rotate the image by an angle
@@ -146,7 +116,3 @@ def create_dataset_by_rotation(image, label):
     label_list = [label for _ in range(sample_size)]
 
     show_random_dataset(rotated_images, label_list)
-
-
-def create_dataset_by_resize_and_shift(image, label):
-    pass
