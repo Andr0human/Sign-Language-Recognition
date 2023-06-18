@@ -41,7 +41,6 @@ def folder_crop(folder_name):
         print("Deleted {} images. The folder now contains {} images.".format(num_images_to_delete, num_images_to_keep))
 
 
-
 def crop_lines_from_mediapipe_excel_dataset(folder_path):
     folder_path = "./mediapipe_dataset/"  # Replace with the path to the folder containing the CSV files
 
@@ -85,6 +84,18 @@ def cvzone_hand_tracking_module_speedtest():
 
     end = time.time()
 
-    print(f'Frames to process : {m}')
-    print(f'Time taken : {end - start} sec.')
     print(f'Hand detection speed : {m / (end - start)} frames/s.')
+    return m / (end - start)
+
+
+def count_files(path):
+    file_count = 0
+
+    folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+
+    for folder in folders:
+        file_list = os.listdir(os.path.join(path, folder))
+        file_count += len(file_list)
+
+    return file_count
+
